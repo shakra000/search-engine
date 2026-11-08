@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shakra Search - Quantum Discovery Engine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #03030a;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background Glow Effects */
+        .bg-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(0, 255, 136, 0.08);
+            filter: blur(120px);
+            border-radius: 50%;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+        }
+
+        /* Main Container */
+        .search-container {
+            max-width: 700px;
+            width: 90%;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .logo-area h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #fff, #00ff88);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-area p {
+            color: #00ff88;
+            font-size: 0.95rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+
+        /* Search Bar Box */
+        .search-box-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 25px 18px 55px;
+            background: rgba(15, 15, 35, 0.8);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 30px;
+            color: #fff;
+            font-size: 1.1rem;
+            outline: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-input:focus {
+            border-color: #00ff88;
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.25);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00ff88;
+            font-size: 1.2rem;
+        }
+
+        /* Search Suggestions / Quick Links */
+        .quick-tags {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #aaa;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .tag:hover {
+            border-color: #00ff88;
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        /* Hint Footer inside container */
+        .hint-box {
+            margin-top: 35px;
+            font-size: 0.85rem;
+            color: #666;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            border: 1px dashed rgba(255, 255, 255, 0.05);
+        }
+
+        .hint-box span {
+            color: #00ff88;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+            color: #555;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        footer a {
+            color: #00ff88;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <div class="search-container">
+        <div class="logo-area">
+            <h1>SHAKRA SEARCH</h1>
+            <p>Quantum-Powered Tech Discovery</p>
+        </div>
+
+        <div class="search-box-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search tech projects, tools, or type 'shakra'..." autocomplete="off" onkeypress="handleSearch(event)">
+        </div>
+
+        <div class="quick-tags">
+            <span class="tag" onclick="searchFor('universe')">universe</span>
+            <span class="tag" onclick="searchFor('password')">cybersecurity</span>
+            <span class="tag" onclick="searchFor('github')">github</span>
+            <span class="tag" onclick="searchFor('shakra')">shakra profile</span>
+        </div>
+
+        <div class="hint-box">
+            💡 <span>Tip:</span> Type <b>"universe"</b>, <b>"password"</b>, or <b>"shakra"</b> and hit Enter!
+        </div>
+    </div>
+
+    <footer>
+        <p>© ShakraTech Engine | Designed by <a href="https://github.com/shakra000" target="_blank">Majida Shakra</a></p>
+    </footer>
+
+    <script>
+        function handleSearch(event) {
+            if (event.key === 'Enter') {
+                const query = document.getElementById('searchInput').value.trim().toLowerCase();
+                executeRouting(query);
+            }
+        }
+
+        function searchFor(keyword) {
+            document.getElementById('searchInput').value = keyword;
+            executeRouting(keyword);
+        }
+
+        function executeRouting(query) {
+            if (query.includes('universe') || query.includes('space') || query.includes('cosmos')) {
+                window.location.href = 'https://shakra000.github.io/universe/';
+            } else if (query.includes('password') || query.includes('cyber') || query.includes('security')) {
+                window.location.href = 'https://shakra000.github.io/PasswordGeneratorAndAnalyzer/';
+            } else if (query.includes('shakra') || query.includes('github') || query.includes('profile')) {
+                window.location.href = 'https://github.com/shakra000';
+            } else if (query !== '') {
+                alert(`Searching global index for: "${query}"...\nRedirecting to main portfolio hub.`);
+                window.location.href = 'https://github.com/shakra000';
+            }
+        }
+    </script>
+</body>
+</html>
